@@ -6,7 +6,7 @@ const enrollmentSchema = new mongoose.Schema({
         // enrolled: Actively registered, appears in schedule and instructor's roster
         // dropped: Student withdrew; dropped_at set, excluded from enrolled_count
         // completed: Course finished, final grade recorded
-        enum: ['enrolled', 'enrolled', 'completed']  
+        enum: ['enrolled', 'dropped', 'completed']  
     },
     grade: {
         type: String
@@ -32,11 +32,7 @@ const enrollmentSchema = new mongoose.Schema({
     student: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
-    },
-    is_active: {
-        type: Boolean,
-        default: true
-    },
+    }
 })
 
 const Enrollment = mongoose.model('Enrollment', enrollmentSchema)
