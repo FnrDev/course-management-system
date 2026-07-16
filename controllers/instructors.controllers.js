@@ -1,3 +1,4 @@
+const isSignedIn = require('../middleware/is-signed-in')
 const Instructor = require('../models/Instructor')
 const User = require('../models/user')
 
