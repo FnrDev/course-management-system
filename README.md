@@ -56,17 +56,68 @@ CROSS-CUTTING
 
 ## Routes
 
-| Method | Route | Description |
-|---------|-------|-------------|
-| GET | / | Home page |
-| GET | /listings | List all listings |
-| GET | /listings/new | New listing form |
-| POST | /listings | Create listing |
-| GET | /listings/:id | View listing |
-| GET | /listings/:id/edit | Edit listing form |
-| PUT | /listings/:id | Update listing |
-| DELETE | /listings/:id | Delete listing |
+## Routes
 
+## Routes
+
+| Method | Route | Description |
+|--------|-------|-------------|
+| GET | `/` | Home page |
+
+### Auth
+
+| Method | Route | Description |
+|--------|-------|-------------|
+| GET | `/auth/sign-up` | Sign-up form |
+| POST | `/auth/sign-up` | Create user account |
+| GET | `/auth/sign-in` | Sign-in form |
+| POST | `/auth/sign-in` | Log user in |
+| GET | `/auth/sign-out` | Log user out |
+
+### Courses
+
+| Method | Route | Description |
+|--------|-------|-------------|
+| GET | `/courses` | List/search/filter all courses |
+| GET | `/courses/new` | New course form (admin) |
+| POST | `/courses` | Create course (admin) |
+| GET | `/courses/:id` | View course details |
+| GET | `/courses/:id/edit` | Edit course form (admin) |
+| PUT | `/courses/:id` | Update course (admin) |
+| DELETE | `/courses/:id` | Delete course (admin) |
+| GET | `/courses/:id/students` | Enrolled students list (instructor) |
+
+### Enrollments
+
+| Method | Route | Description |
+|--------|-------|-------------|
+| GET | `/enrollments` | My enrollments (student) |
+| POST | `/courses/:id/enrollments` | Enroll in course (student) |
+| DELETE | `/enrollments/:id` | Drop course (student) |
+| GET | `/enrollments/:id/grade` | Grade entry form (instructor) |
+| PUT | `/enrollments/:id/grade` | Enter/update grade (instructor) |
+
+### Students
+
+| Method | Route | Description |
+|--------|-------|-------------|
+| GET | `/students` | List all students (admin) |
+| GET | `/students/:id` | View student profile |
+| GET | `/students/:id/edit` | Edit profile form |
+| PUT | `/students/:id` | Update student info |
+| DELETE | `/students/:id` | Delete student (admin) |
+
+### Instructors
+
+| Method | Route | Description |
+|--------|-------|-------------|
+| GET | `/instructors` | List all instructors |
+| GET | `/instructors/new` | New instructor form (admin) |
+| POST | `/instructors` | Create instructor (admin) |
+| GET | `/instructors/:id` | View instructor profile |
+| GET | `/instructors/:id/edit` | Edit instructor form (admin) |
+| PUT | `/instructors/:id` | Update instructor (admin) |
+| DELETE | `/instructors/:id` | Delete instructor (admin) |
 
 ## Features
 
