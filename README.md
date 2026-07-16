@@ -85,7 +85,6 @@ CROSS-CUTTING
 | GET | `/courses/:id/edit` | Edit course form (admin) |
 | PUT | `/courses/:id` | Update course (admin) |
 | DELETE | `/courses/:id` | Delete course (admin) |
-| GET | `/courses/:id/students` | Enrolled students list (instructor) |
 
 ### Enrollments
 
