@@ -60,7 +60,7 @@ app.use(passUserToView)
 // Routes go here
 app.use('/auth',authController)
 app.use('/courses', coursesController)
-app.use('enrollments', enrollmentsController)
+app.use('enrollments', isSignedIn, enrollmentsController)
 app.use('/students', studentController)
 app.use('/instructors', instructorController)
 app.use('/',indexController)
