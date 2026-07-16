@@ -1,9 +1,10 @@
+const checkRole = require('../middleware/checkRole');
 const Student = require('../models/Student')
 
 const router = require('express').Router()
 
 // List all students (admin)
-router.get('/', async (req, res) => {
+router.get('/', checkRole("admin"), async (req, res) => {
     const students = await Student.find();
     res.render('students/all-students.ejs', { students })
 })
@@ -34,7 +35,7 @@ router.put('/:id', async (req, res) => {
     res.redirect('/students')
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', checkRole("admin"), async (req, res) => {
     await Student.findByIdAndUpdate(req.params.id, {
         status: 'inactive'
     })
