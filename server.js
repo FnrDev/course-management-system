@@ -18,6 +18,7 @@ const indexController = require("./controllers/index.controllers.js");
 const coursesController = require("./controllers/courses.controllers.js")
 const enrollmentsController = require("./controllers/enrollments.controllers.js")
 const studentController = require("./controllers/students.controllers.js")
+const instructorController = require('./controllers/instructors.controllers.js')
 
 
 // Middleware
@@ -61,6 +62,7 @@ app.use('/auth',authController)
 app.use('/courses', coursesController)
 app.use('enrollments', enrollmentsController)
 app.use('/students', studentController)
+app.use('/instructors', instructorController)
 app.use('/',indexController)
 
 
