@@ -12,7 +12,8 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['student', 'instructor', 'admin']
+    enum: ['student', 'instructor', 'admin'],
+    default: "student"
   },
   // this field will be used for soft delete
   is_active: {
