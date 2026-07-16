@@ -16,8 +16,8 @@ const passUserToView = require("./middleware/pass-user-to-view.js");
 const authController = require("./controllers/auth.controllers.js");
 const indexController = require("./controllers/index.controllers.js");
 const coursesController = require("./controllers/courses.controllers.js")
-const enrollmentsController = require("./controllers/enrollment.controllers.js")
-const studentController = require("./controllers/student.controllers.js")
+const enrollmentsController = require("./controllers/enrollments.controllers.js")
+const studentController = require("./controllers/students.controllers.js")
 
 
 // Middleware
