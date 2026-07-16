@@ -42,12 +42,12 @@ router.get('/:id', async (req, res) => {
     const enrollmentForCourse = await Enrollment.find({ course: req.params.id  })
     const students = enrollmentForCourse.map(enrollment => enrollment.student)
 
-    res.render('courses/details-couses.ejs', { course, students })
+    res.render('courses/details-courses.ejs', { course, students })
 })
 
 router.get('/:id/edit', async (req, res) => {
     const course = await Course.findById(req.params.id)
-    res.render('courses/edit-couses.ejs', { course })
+    res.render('courses/edit-courses.ejs', { course })
 })
 
 router.put('/:id', async (req, res) => {
