@@ -1,17 +1,28 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-  username: {
+  email: {
     type: String,
     required: true,
-    unique: true,
-    trim: true
+    unique: true
   },
   password: {
     type: String,
-    required: true,
+    required: true
   },
-}, {timestamps: true});
+  role: {
+    type: String,
+    enum: ['student', 'instructors', 'admin']
+  },
+  // this field will be used for soft delete
+  is_active: {
+    type: Boolean,
+    default: true
+  },
+  last_login_at: {
+    type: Date
+  }
+}, { timestamps: true });
 
 const User = mongoose.model("User", userSchema);
 
