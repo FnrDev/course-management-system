@@ -3,9 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title><%= course.code %> — <%= course.name %></title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <h1>Courses Details</h1>
+    <%- include('../partials/navbar') %>
+
+    <main>
+        <a class="back-link" href="/courses">← Back to courses</a>
+
+        <div class="page-head">
+            <div>
+                <span class="card-code"><%= course.code %></span>
+                <h1><%= course.name %></h1>
+            </div>
+
+            <% if (user && user.role === 'admin') { %>
+                <div class="page-head-actions">
+                    <a class="btn btn-ghost" href="/courses/<%= course._id %>/edit">Edit</a>
+                    <form action="/courses/<%= course._id %>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
+                </div>
+            <% } %>
+        </div>
+
+        <p class="lede"><%= course.description %></p>
+
+        <dl class="facts">
+            <div>
+                <dt>Credits</dt>
+                <dd><%= course.credits %></dd>
+            </div>
+            <div>
+                <dt>Seats</dt>
+                <dd><%= enrolledCount %> / <%= course.capacity %></dd>
+            </div>
+            <div>
+                <dt>Instructor</dt>
+                <dd>
+                    <% if (course.instructor) { %>
+                        <a href="/instructors/<%= course.instructor._id %>">
+                            <%= course.instructor.firstName %> <%= course.instructor.lastName %>
+                        </a>
+                    <% } else { %>
+                        Unassigned
+                    <% } %>
+                </dd>
+            </div>
+        </dl>
+
+        <% if (user && user.role === 'student') { %>
+            <% if (myEnrollment) { %>
+                <div class="notice">
+                    <span>You're enrolled in this course.</span>
+                    <form action="/enrollments/<%= myEnrollment._id %>?_method=DELETE" method="POST">
+                        <button class="btn btn-ghost" type="submit">Drop course</button>
+                    </form>
+                </div>
+            <% } else if (enrolledCount >= course.capacity) { %>
+                <p class="notice">This course is full.</p>
+            <% } else { %>
+                <form action="/enrollments/<%= course._id %>" method="POST">
+                    <button class="btn btn-solid" type="submit">Enroll</button>
+                </form>
+            <% } %>
+        <% } %>
+
+        <% if (user && (user.role === 'admin' || user.role === 'instructor')) { %>
+            <section class="roster">
+                <h2>Enrolled students (<%= enrollments.length %>)</h2>
+
+                <% if (enrollments.length === 0) { %>
+                    <p class="empty">Nobody has enrolled yet.</p>
+                <% } else { %>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Student #</th>
+                                <th>Name</th>
+                                <th>Grade</th>
+                                <% if (user.role === 'instructor') { %>
+                                    <th></th>
+                                <% } %>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% enrollments.forEach(enrollment => { %>
+                                <tr>
+                                    <td><%= enrollment.student ? enrollment.student.studentNumber : '—' %></td>
+                                    <td>
+                                        <% if (enrollment.student) { %>
+                                            <a href="/students/<%= enrollment.student._id %>">
+                                                <%= enrollment.student.firstName %> <%= enrollment.student.lastName %>
+                                            </a>
+                                        <% } else { %>
+                                            Unknown
+                                        <% } %>
+                                    </td>
+                                    <td><%= enrollment.grade || 'Not graded' %></td>
+                                    <% if (user.role === 'instructor') { %>
+                                        <td>
+                                            <a class="btn btn-ghost btn-sm" href="/enrollments/<%= enrollment._id %>/grade">
+                                                Grade
+                                            </a>
+                                        </td>
+                                    <% } %>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                <% } %>
+            </section>
+        <% } %>
+    </main>
 </body>
 </html>

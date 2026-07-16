@@ -3,9 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Courses</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <h1>All courses</h1>
+    <%- include('../partials/navbar') %>
+
+    <main>
+        <div class="page-head">
+            <h1>Courses</h1>
+            <% if (user && user.role === 'admin') { %>
+                <a class="btn btn-solid" href="/courses/new">New Course</a>
+            <% } %>
+        </div>
+
+        <form class="filters" action="/courses" method="GET">
+            <input
+                type="search"
+                name="q"
+                placeholder="Search by name or code"
+                value="<%= filters.q %>"
+            >
+            <select name="instructor">
+                <option value="">All instructors</option>
+                <% instructors.forEach(instructor => { %>
+                    <option
+                        value="<%= instructor._id %>"
+                        <%= filters.instructor === String(instructor._id) ? 'selected' : '' %>
+                    >
+                        <%= instructor.firstName %> <%= instructor.lastName %>
+                    </option>
+                <% }) %>
+            </select>
+            <button class="btn btn-solid" type="submit">Filter</button>
+            <% if (filters.q || filters.instructor) { %>
+                <a class="btn btn-ghost" href="/courses">Clear</a>
+            <% } %>
+        </form>
+
+        <% if (courses.length === 0) { %>
+            <p class="empty">No courses match your search.</p>
+        <% } else { %>
+            <ul class="card-grid">
+                <% courses.forEach(course => { %>
+                    <% const enrolled = counts[course._id] || 0 %>
+                    <li class="card">
+                        <div class="card-head">
+                            <span class="card-code"><%= course.code %></span>
+                            <span class="pill <%= enrolled >= course.capacity ? 'pill-full' : 'pill-open' %>">
+                                <%= enrolled %>/<%= course.capacity %>
+                            </span>
+                        </div>
+
+                        <h2 class="card-title">
+                            <a href="/courses/<%= course._id %>"><%= course.name %></a>
+                        </h2>
+
+                        <p class="card-desc"><%= course.description %></p>
+
+                        <div class="card-meta">
+                            <span><%= course.credits %> credits</span>
+                            <span>
+                                <% if (course.instructor) { %>
+                                    <%= course.instructor.firstName %> <%= course.instructor.lastName %>
+                                <% } else { %>
+                                    Unassigned
+                                <% } %>
+                            </span>
+                        </div>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } %>
+    </main>
 </body>
 </html>

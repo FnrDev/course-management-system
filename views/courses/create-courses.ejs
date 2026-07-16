@@ -3,9 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>New Course</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <h1>Create courses</h1>
+    <%- include('../partials/navbar') %>
+
+    <main>
+        <a class="back-link" href="/courses">← Back to courses</a>
+        <h1>New course</h1>
+
+        <form class="form" action="/courses" method="POST">
+            <div class="field">
+                <label for="code">Course code</label>
+                <input type="text" name="code" id="code" placeholder="CS101" required>
+            </div>
+
+            <div class="field">
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name" minlength="3" maxlength="100" required>
+            </div>
+
+            <div class="field">
+                <label for="description">Description</label>
+                <textarea name="description" id="description" rows="4" minlength="3" maxlength="100" required></textarea>
+            </div>
+
+            <div class="field-row">
+                <div class="field">
+                    <label for="credits">Credits</label>
+                    <input type="number" name="credits" id="credits" min="1" required>
+                </div>
+
+                <div class="field">
+                    <label for="capacity">Capacity</label>
+                    <input type="number" name="capacity" id="capacity" min="1" required>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="instructor">Instructor</label>
+                <select name="instructor" id="instructor">
+                    <option value="">Unassigned</option>
+                    <% instructors.forEach(instructor => { %>
+                        <option value="<%= instructor._id %>">
+                            <%= instructor.firstName %> <%= instructor.lastName %>
+                        </option>
+                    <% }) %>
+                </select>
+            </div>
+
+            <label class="field-check">
+                <input type="checkbox" name="isActive" checked>
+                Active — visible in the catalog
+            </label>
+
+            <div class="form-actions">
+                <button class="btn btn-solid" type="submit">Create course</button>
+                <a class="btn btn-ghost" href="/courses">Cancel</a>
+            </div>
+        </form>
+    </main>
 </body>
 </html>
