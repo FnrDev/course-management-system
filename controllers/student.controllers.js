@@ -1,0 +1,44 @@
+const Student = require('../models/Student')
+
+const router = require('express').Router()
+
+// List all students (admin)
+router.get('/', async (req, res) => {
+    const students = await Student.find();
+    res.render('students/all-students.ejs', { students })
+})
+
+router.get('/:id', async (req, res) => {
+    const student = await Student.findById(req.params.id)
+    res.render('students/details-student.ejs', { student })
+})
+
+router.get('/:id/edit', async (req, res) => {
+    const student = await Student.findById(req.params.id)
+    res.render('students/edit-student.ejs', { student })
+})
+
+router.put('/:id', async (req, res) => {
+    const {
+        firstName,
+        lastName,
+        status
+    } = req.body;
+
+    await Student.findByIdAndUpdate(req.params.id, {
+        firstName,
+        lastName,
+        status
+    })
+
+    res.redirect('/students')
+})
+
+router.delete('/:id', async (req, res) => {
+    await Student.findByIdAndUpdate(req.params.id, {
+        status: 'inactive'
+    })
+})
+
+
+module.exports = router
