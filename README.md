@@ -52,7 +52,7 @@ CROSS-CUTTING
 * As a user, I want to log in with my credentials so that I only see what my role permits.
 
 ## Database Design
-
+![alt text](erd-diagram.png)
 
 ## Routes
 
