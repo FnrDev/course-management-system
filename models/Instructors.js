@@ -20,9 +20,13 @@ const instructorSchmea = new mongoose.Schema({
         // inactive: Temporarily not teaching (sabbatical, leave)
         // former: No longer employed, kept for historical grade records
         enum: ['active', 'inactive', 'former']
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
     }
 }, { timestamps: true })
 
-const Instructor = mongoose.model('instructor', instructorSchmea)
+const Instructor = mongoose.model('Instructor', instructorSchmea)
 
 module.exports = Instructor
