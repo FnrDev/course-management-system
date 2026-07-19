@@ -12,12 +12,11 @@ router.get('/', checkRole("student"), async (req, res) => {
 
 // Enroll in course (student)
 router.post('/:courseId', checkRole("student"), async (req, res) => {
-    const currentStudent = await Student.findOne({ user: req.session.user._id })
     await Enrollment.create({
         course: req.params.courseId,
         status: 'enrolled',
         enrolledAt: new Date(),
-        student: currentStudent._id
+        student: req.session.user._id
     })
 
     res.redirect('/enrollments')
