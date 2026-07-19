@@ -19,13 +19,11 @@ async function countEnrolledByCourse(courseIds) {
 
 router.get('/', async (req, res) => {
     const courses = await Course.find().populate('instructor')
-    console.log(courses)
     const enrolledObj = await countEnrolledByCourse(courses.map(course => course._id))
-    const enrollCount = Object.keys(enrolledObj).length ? enrolledObj : 0
 
     res.render('courses/all-courses.ejs', {
         courses,
-        enrolled: enrollCount
+        enrolled: enrolledObj
     })
 })
 
@@ -70,6 +68,7 @@ router.get('/:id', async (req, res) => {
         course: req.params.id,
         status: 'enrolled'
     }).populate('student')
+    console.log(enrollments)
 
     // has the signed-in student already taken a seat?
     let myEnrollment = null

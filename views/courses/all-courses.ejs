@@ -26,7 +26,7 @@
                         <div class="card-head">
                             <span class="card-code"><%= course.code %></span>
                             <span class="pill <%= enrolled >= course.capacity ? 'pill-full' : 'pill-open' %>">
-                                <%= enrolled %>/<%= course.capacity %>
+                                <%= enrolled[course._id] %>/<%= course.capacity %>
                             </span>
                         </div>
 
