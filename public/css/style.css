@@ -578,6 +578,15 @@ textarea {
     }
 }
 
+/* Narrow, centered shell for standalone form pages */
+.form-page {
+    max-width: 610px;
+}
+
+.form-page .form {
+    max-width: none;
+}
+
 /* ---------- Auth pages ---------- */
 
 .auth {

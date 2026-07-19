@@ -17,36 +17,11 @@
             <% } %>
         </div>
 
-        <form class="filters" action="/courses" method="GET">
-            <input
-                type="search"
-                name="q"
-                placeholder="Search by name or code"
-                value="<%= filters.q %>"
-            >
-            <select name="instructor">
-                <option value="">All instructors</option>
-                <% instructors.forEach(instructor => { %>
-                    <option
-                        value="<%= instructor._id %>"
-                        <%= filters.instructor === String(instructor._id) ? 'selected' : '' %>
-                    >
-                        <%= instructor.firstName %> <%= instructor.lastName %>
-                    </option>
-                <% }) %>
-            </select>
-            <button class="btn btn-solid" type="submit">Filter</button>
-            <% if (filters.q || filters.instructor) { %>
-                <a class="btn btn-ghost" href="/courses">Clear</a>
-            <% } %>
-        </form>
-
         <% if (courses.length === 0) { %>
             <p class="empty">No courses match your search.</p>
         <% } else { %>
             <ul class="card-grid">
                 <% courses.forEach(course => { %>
-                    <% const enrolled = counts[course._id] || 0 %>
                     <li class="card">
                         <div class="card-head">
                             <span class="card-code"><%= course.code %></span>

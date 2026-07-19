@@ -6,11 +6,26 @@ const Student = require("../models/Student")
 const checkRole = require('../middleware/checkRole')
 const isSignedIn = require("../middleware/is-signed-in")
 
+async function countEnrolledByCourse(courseIds) {
+    const rows = await Enrollment.aggregate([
+        { $match: { course: { $in: courseIds }, status: 'enrolled' } },
+        { $group: { _id: '$course', total: { $sum: 1 } } }
+    ])
+
+    const counts = {}
+    rows.forEach(row => { counts[row._id] = row.total })
+    return counts
+}
+
 router.get('/', async (req, res) => {
-    const courses = await Course.find(query).populate('instructor')
+    const courses = await Course.find().populate('instructor')
+    console.log(courses)
+    const enrolledObj = await countEnrolledByCourse(courses.map(course => course._id))
+    const enrollCount = Object.keys(enrolledObj).length ? enrolledObj : 0
 
     res.render('courses/all-courses.ejs', {
-        courses
+        courses,
+        enrolled: enrollCount
     })
 })
 
