@@ -8,18 +8,33 @@
   </head>
   <body>
     <%- include('../partials/navbar') %>
-    <h1>Create a new account!</h1>
-    <form action="/auth/sign-up" method="post">
-      <label for="email">Email:</label>
-      <input type="email" name="email" id="email" />
 
-      <label for="password">Password:</label>
-      <input type="password" name="password" id="password" />
+    <main class="auth">
+      <h1>Create an account</h1>
+      <p class="auth-sub">Join CourseHub to browse and enroll in courses.</p>
 
-      <label for="confirmPassword">Confirm Password:</label>
-      <input type="password" name="confirmPassword" id="confirmPassword" />
+      <form class="form" action="/auth/sign-up" method="post">
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" name="email" id="email" autocomplete="email" required />
+        </div>
 
-      <button type="submit">Sign up</button>
-    </form>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" autocomplete="new-password" required />
+        </div>
+
+        <div class="field">
+          <label for="confirmPassword">Confirm password</label>
+          <input type="password" name="confirmPassword" id="confirmPassword" autocomplete="new-password" required />
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-solid" type="submit">Sign up</button>
+        </div>
+
+        <p class="auth-alt">Already have an account? <a href="/auth/sign-in">Sign in</a></p>
+      </form>
+    </main>
   </body>
 </html>

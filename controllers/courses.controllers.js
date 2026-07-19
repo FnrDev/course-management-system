@@ -6,44 +6,11 @@ const Student = require("../models/Student")
 const checkRole = require('../middleware/checkRole')
 const isSignedIn = require("../middleware/is-signed-in")
 
-// Live enrolled count per course, keyed by course id. The stored
-// enrolledCount field goes stale as students drop, so it isn't used.
-async function countEnrolledByCourse(courseIds) {
-    const rows = await Enrollment.aggregate([
-        { $match: { course: { $in: courseIds }, status: 'enrolled' } },
-        { $group: { _id: '$course', total: { $sum: 1 } } }
-    ])
-
-    const counts = {}
-    rows.forEach(row => { counts[row._id] = row.total })
-    return counts
-}
-
-// List/search/filter all courses
 router.get('/', async (req, res) => {
-    const { q, instructor } = req.query
-
-    const query = { isActive: true }
-
-    if (q) {
-        // match either the course name or its code, case-insensitively
-        const search = new RegExp(q.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')
-        query.$or = [{ name: search }, { code: search }]
-    }
-
-    if (instructor) {
-        query.instructor = instructor
-    }
-
-    const courses = await Course.find(query).populate('instructor').sort({ code: 1 })
-    const counts = await countEnrolledByCourse(courses.map(course => course._id))
-    const instructors = await Instructor.find({ status: 'active' }).sort({ firstName: 1 })
+    const courses = await Course.find(query).populate('instructor')
 
     res.render('courses/all-courses.ejs', {
-        courses,
-        counts,
-        instructors,
-        filters: { q: q || '', instructor: instructor || '' }
+        courses
     })
 })
 

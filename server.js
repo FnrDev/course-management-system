@@ -7,6 +7,7 @@ const session = require('express-session');
 const methodOverride = require('method-override')
 const {MongoStore} = require("connect-mongo");
 const connectToDB = require('./db.js')
+const path = require('path')
 
 // middleware imports
 const isSignedIn = require("./middleware/is-signed-in.js");
@@ -20,6 +21,9 @@ const enrollmentsController = require("./controllers/enrollments.controllers.js"
 const studentController = require("./controllers/students.controllers.js")
 const instructorController = require('./controllers/instructors.controllers.js')
 
+// Serve Bootstrap CSS and JS from node_modules
+app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')));
+app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')));
 
 // Middleware
 app.use(express.static('public')) // my app will serve all static files from public folder
@@ -46,17 +50,6 @@ app.use(
 app.use(passUserToView)
 
 
-
-
-
-
-
-
-
-
-
-
-
 // Routes go here
 app.use('/auth',authController)
 app.use('/courses', coursesController)
@@ -64,9 +57,6 @@ app.use('/enrollments', isSignedIn, enrollmentsController)
 app.use('/students', isSignedIn, studentController)
 app.use('/instructors', instructorController)
 app.use('/',indexController)
-
-
-
 
 
 // connect to database and listen on Port 3000

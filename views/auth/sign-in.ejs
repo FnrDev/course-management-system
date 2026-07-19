@@ -8,13 +8,28 @@
   </head>
   <body>
     <%- include('../partials/navbar') %>
-    <h1>Sign in</h1>
-    <form action="/auth/sign-in" method="POST">
-      <label for="username">Username:</label>
-      <input type="text" name="username" id="username" />
-      <label for="password">Password:</label>
-      <input type="password" name="password" id="password" />
-      <button type="submit">Sign in</button>
-    </form>
+
+    <main class="auth">
+      <h1>Sign in</h1>
+      <p class="auth-sub">Welcome back to CourseHub.</p>
+
+      <form class="form" action="/auth/sign-in" method="POST">
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="text" name="email" id="email" autocomplete="email" required />
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" autocomplete="current-password" required />
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-solid" type="submit">Sign in</button>
+        </div>
+
+        <p class="auth-alt">New here? <a href="/auth/sign-up">Create an account</a></p>
+      </form>
+    </main>
   </body>
 </html>

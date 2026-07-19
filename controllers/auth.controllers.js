@@ -10,7 +10,7 @@ router.get("/sign-up", (req, res) => {
 });
 
 router.post("/sign-up", async (req, res) => {
-  const userInDatabase = await User.findOne({ username: req.body.username });
+  const userInDatabase = await User.findOne({ email: req.body.email });
   if (userInDatabase) {
     return res.send("Username already taken.");
   }
@@ -39,7 +39,7 @@ router.get("/sign-in", (req, res) => {
 
 router.post("/sign-in", async (req, res) => {
   // First, get the user from the database
-  const userInDatabase = await User.findOne({ username: req.body.email });
+  const userInDatabase = await User.findOne({ email: req.body.email });
   if (!userInDatabase) {
     return res.send("Login failed. Please try again.");
   }
