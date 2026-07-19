@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const instructorSchmea = new mongoose.Schema({
     staffNumber: {
-        type: Number,
+        type: String,
         unique: true,
         required: true
     },

@@ -3,9 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>New Course</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <h1>Create Instructors</h1>
+    <%- include('../partials/navbar') %>
+
+    <main class="form-page">
+        <a class="back-link" href="/instructors">← Back to instructors</a>
+        <h1>New instructor</h1>
+
+        <form class="form" action="/instructors" method="POST">
+            <div class="field">
+                <label for="code">Staff number</label>
+                <input type="text" name="staffNumber" id="code" placeholder="CS101" required>
+            </div>
+
+            <div class="field">
+                <label for="name">First name</label>
+                <input type="text" name="firstName" id="name" minlength="3" maxlength="100" required>
+            </div>
+
+            <div class="field">
+                <label for="description">Last Name</label>
+                <input type="text" name="lastName" id="name" minlength="3" maxlength="100" required>
+            </div>
+
+            <div class="field">
+                <label for="instructor">Status</label>
+                <select name="status" id="instructor">
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                    <option value="former">Former</option>
+                </select>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn btn-solid" type="submit">Create instructor</button>
+                <a class="btn btn-ghost" href="/instructors">Cancel</a>
+            </div>
+        </form>
+    </main>
 </body>
 </html>
