@@ -14,11 +14,13 @@ router.get('/:id', async (req, res) => {
     res.render('students/details-student.ejs', { student })
 })
 
+// I know we can edit any user just by changing id
 router.get('/:id/edit', async (req, res) => {
     const student = await Student.findById(req.params.id)
     res.render('students/edit-student.ejs', { student })
 })
 
+// I know we can edit any user just by changing id
 router.put('/:id', async (req, res) => {
     const {
         firstName,

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>students</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+    <%- include('../partials/sidebar') %>
+
+    <main>
+        <div class="page-head">
+            <h1>students</h1>
+            <% if (user && user.role === 'admin') { %>
+                <a class="btn btn-solid" href="/studentss/new">New students</a>
+            <% } %>
+        </div>
+
+        <% if (students.length === 0) { %>
+            <p class="empty">No students match your search.</p>
+        <% } else { %>
+            <ul class="card-grid">
+                <% students.forEach(student => { %>
+                    <li class="card">
+                        <div class="card-head">
+                            <span class="card-code">Student ID: <%= student.studentNumber %></span>
+                        </div>
+
+                        <h2 class="card-title">
+                            <a href="/students/<%= student._id %>"><%= student.firstName + " " + student.lastName %></a>
+                        </h2>
+
+                            <div class="card-meta">
+                                <a class="btn btn-solid btn-sm" href="/students/<%= student._id %>" role="button">Go to students</a>
+                            </div>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } %>
+    </main>
+</body>
+</html>
