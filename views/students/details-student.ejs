@@ -22,9 +22,13 @@
             <% if (user && user.role === 'admin') { %>
                 <div class="page-head-actions">
                     <a class="btn btn-ghost" href="/students/<%= student._id %>/edit">Edit</a>
-                    <form action="/students/<%= student._id %>?_method=DELETE" method="POST">
-                        <button class="btn btn-danger" type="submit">Delete</button>
-                    </form>
+                    <%- include('../partials/delete-confirmation', {
+                        confirmId: 'delete-student-confirmation',
+                        action: `/students/${student._id}?_method=DELETE`,
+                        title: 'Delete student?',
+                        message: `${student.firstName} ${student.lastName} will be marked as inactive.`,
+                        confirmLabel: 'Delete student'
+                    }) %>
                 </div>
             <% } %>
         </div>

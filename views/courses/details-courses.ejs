@@ -22,9 +22,13 @@
             <% if (user && user.role === 'admin') { %>
                 <div class="page-head-actions">
                     <a class="btn btn-ghost" href="/courses/<%= course._id %>/edit">Edit</a>
-                    <form action="/courses/<%= course._id %>?_method=DELETE" method="POST">
-                        <button class="btn btn-danger" type="submit">Delete</button>
-                    </form>
+                    <%- include('../partials/delete-confirmation', {
+                        confirmId: 'delete-course-confirmation',
+                        action: `/courses/${course._id}?_method=DELETE`,
+                        title: 'Delete course?',
+                        message: `${course.name} will be removed from the active course catalog.`,
+                        confirmLabel: 'Delete course'
+                    }) %>
                 </div>
             <% } %>
         </div>
@@ -58,9 +62,14 @@
             <% if (myEnrollment) { %>
                 <div class="notice">
                     <span>You're enrolled in this course.</span>
-                    <form action="/enrollments/<%= myEnrollment._id %>?_method=DELETE" method="POST">
-                        <button class="btn btn-ghost" type="submit">Drop course</button>
-                    </form>
+                    <%- include('../partials/delete-confirmation', {
+                        confirmId: 'drop-course-confirmation',
+                        action: `/enrollments/${myEnrollment._id}?_method=DELETE`,
+                        title: 'Drop this course?',
+                        message: `You will be removed from ${course.name}.`,
+                        triggerLabel: 'Drop course',
+                        confirmLabel: 'Drop course'
+                    }) %>
                 </div>
             <% } else if (enrolledCount >= course.capacity) { %>
                 <p class="notice">This course is full.</p>

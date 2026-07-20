@@ -32,19 +32,31 @@ router.delete('/:id', checkRole("student"), async (req, res) => {
 
 // Grade entry form (instructor)
 router.get('/:id/grade', checkRole("instructor"), async (req, res) => {
-    res.render('enrollments/enrollment-grade.ejs')
+    const enrollment = await Enrollment.findById(req.params.id)
+        .populate('student')
+        .populate('course')
+
+    if (!enrollment || !enrollment.student || !enrollment.course) {
+        return res.redirect('/courses')
+    }
+
+    res.render('enrollments/enrollment-grade.ejs', { enrollment })
 })
 
 router.put('/:id/grade', checkRole("instructor"), async (req, res) => {
     const { grade } = req.body
 
-    await Enrollment.findByIdAndUpdate(req.params.id, {
+    const enrollment = await Enrollment.findByIdAndUpdate(req.params.id, {
         grade,
         gradedAt: new Date(),
         gradedBy: req.session.user._id
     })
 
-    res.redirect('/enrollments')
+    if (!enrollment) {
+        return res.redirect('/courses')
+    }
+
+    res.redirect(`/courses/${enrollment.course}`)
 })
 
 module.exports = router

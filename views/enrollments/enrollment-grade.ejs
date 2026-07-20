@@ -3,9 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Grade <%= enrollment.student.firstName %> <%= enrollment.student.lastName %></title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <h1>Enrollment Grade</h1>
+    <%- include('../partials/navbar') %>
+    <%- include('../partials/sidebar') %>
+
+    <main class="form-page">
+        <a class="back-link" href="/courses/<%= enrollment.course._id %>">← Back to course</a>
+
+        <div class="page-head">
+            <div>
+                <span class="card-code"><%= enrollment.course.code %></span>
+                <h1>Grade <%= enrollment.student.firstName %> <%= enrollment.student.lastName %></h1>
+            </div>
+        </div>
+
+        <dl class="facts">
+            <div>
+                <dt>Student number</dt>
+                <dd><%= enrollment.student.studentNumber %></dd>
+            </div>
+            <div>
+                <dt>Course</dt>
+                <dd><%= enrollment.course.name %></dd>
+            </div>
+            <div>
+                <dt>Current grade</dt>
+                <dd><%= enrollment.grade || 'Not graded' %></dd>
+            </div>
+        </dl>
+
+        <form class="form" action="/enrollments/<%= enrollment._id %>/grade?_method=PUT" method="POST">
+            <div class="field">
+                <label for="grade">Grade</label>
+                <input
+                    type="text"
+                    name="grade"
+                    id="grade"
+                    value="<%= enrollment.grade || '' %>"
+                    placeholder="For example: A, B+, or 85%"
+                    maxlength="10"
+                    autofocus
+                    required
+                >
+            </div>
+
+            <div class="form-actions">
+                <button class="btn btn-solid" type="submit">
+                    <%= enrollment.grade ? 'Update grade' : 'Save grade' %>
+                </button>
+                <a class="btn btn-ghost" href="/courses/<%= enrollment.course._id %>">Cancel</a>
+            </div>
+        </form>
+    </main>
 </body>
 </html>

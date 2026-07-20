@@ -1,0 +1,26 @@
+<button
+    class="btn btn-danger"
+    type="button"
+    onclick="document.getElementById('<%= confirmId %>').showModal()"
+>
+    <%= typeof triggerLabel !== 'undefined' ? triggerLabel : 'Delete' %>
+</button>
+
+<dialog class="confirmation-dialog" id="<%= confirmId %>" aria-labelledby="<%= confirmId %>-title">
+    <div class="confirmation-dialog-content">
+        <h2 id="<%= confirmId %>-title"><%= title %></h2>
+        <p><%= message %></p>
+
+        <div class="confirmation-actions">
+            <form method="dialog">
+                <button class="btn btn-ghost" type="submit">Cancel</button>
+            </form>
+
+            <form action="<%= action %>" method="POST">
+                <button class="btn btn-danger" type="submit">
+                    <%= typeof confirmLabel !== 'undefined' ? confirmLabel : 'Delete' %>
+                </button>
+            </form>
+        </div>
+    </div>
+</dialog>
