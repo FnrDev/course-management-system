@@ -1,35 +1,42 @@
+<%# Lives outside <nav> so the `~` selector can reach the sidebar below it %>
+<input type="checkbox" id="sidebar-toggle" class="sidebar-toggle">
+
 <nav class="navbar">
+    <% if (user) { %>
+        <label for="sidebar-toggle" class="navbar-burger">
+            <span></span><span></span><span></span>
+        </label>
+    <% } %>
+
     <a class="navbar-brand" href="/">Course<span>Hub</span></a>
 
-    <input type="checkbox" id="navbar-toggle" class="navbar-toggle">
-    <label for="navbar-toggle" class="navbar-burger">
-        <span></span><span></span><span></span>
-    </label>
+    <div class="navbar-actions">
+        <% if (user) { %>
+            <input type="checkbox" id="user-menu-toggle" class="user-menu-toggle">
 
-    <div class="navbar-menu">
-        <ul class="navbar-links">
-            <li><a href="/courses">Courses</a></li>
-            <li><a href="/instructors">Instructors</a></li>
+            <label for="user-menu-toggle" class="avatar" title="<%= user.email %>">
+                <%= user.email.charAt(0).toUpperCase() %>
+            </label>
 
-            <% if (user && user.role === 'student') { %>
-                <li><a href="/enrollments">My Enrollments</a></li>
-            <% } %>
+            <label for="user-menu-toggle" class="modal-backdrop"></label>
 
-            <% if (user && user.role === 'admin') { %>
-                <li><a href="/students">Students</a></li>
-                <li><a href="/courses/new">New Course</a></li>
-                <li><a href="/instructors/new">Add Instructor</a></li>
-            <% } %>
-        </ul>
+            <div class="modal" role="dialog" aria-label="Account">
+                <div class="modal-head">
+                    <span class="avatar avatar-lg"><%= user.email.charAt(0).toUpperCase() %></span>
+                    <div>
+                        <p class="modal-email"><%= user.email %></p>
+                        <span class="navbar-role navbar-role-<%= user.role %>"><%= user.role %></span>
+                    </div>
+                </div>
 
-        <div class="navbar-actions">
-            <% if (user) { %>
-                <span class="navbar-role navbar-role-<%= user.role %>"><%= user.role %></span>
-                <a class="navbar-btn navbar-btn-ghost" href="/auth/sign-out">Logout</a>
-            <% } else { %>
-                <a class="navbar-btn navbar-btn-ghost" href="/auth/sign-in">Login</a>
-                <a class="navbar-btn navbar-btn-solid" href="/auth/sign-up">Sign up</a>
-            <% } %>
-        </div>
+                <div class="modal-actions">
+                    <label for="user-menu-toggle" class="btn btn-ghost">Cancel</label>
+                    <a class="btn btn-danger" href="/auth/sign-out">Logout</a>
+                </div>
+            </div>
+        <% } else { %>
+            <a class="navbar-btn navbar-btn-ghost" href="/auth/sign-in">Login</a>
+            <a class="navbar-btn navbar-btn-solid" href="/auth/sign-up">Sign up</a>
+        <% } %>
     </div>
 </nav>

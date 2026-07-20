@@ -4,6 +4,8 @@
     --navbar-fg-strong: #ffffff;
     --navbar-accent: #4f7cff;
     --navbar-border: rgba(255, 255, 255, 0.08);
+    --navbar-h: 60px;
+    --sidebar-w: 220px;
 }
 
 * {
@@ -12,6 +14,7 @@
 
 body {
     margin: 0;
+    padding-top: var(--navbar-h);
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     background: #f5f6fa;
     color: #1c2130;
@@ -19,13 +22,18 @@ body {
 
 /* ---------- Navbar ---------- */
 
+/* Fixed bar holding only the brand + account avatar; page links live in the sidebar */
 .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 30;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
     gap: 1rem;
-    padding: 0.75rem 1.5rem;
+    height: var(--navbar-h);
+    padding: 0 1.5rem;
     background: var(--navbar-bg);
     border-bottom: 1px solid var(--navbar-border);
 }
@@ -42,26 +50,40 @@ body {
     color: var(--navbar-accent);
 }
 
-.navbar-menu {
+.navbar-actions {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    flex: 1;
-    gap: 1.5rem;
+    gap: 0.75rem;
+    margin-left: auto;
 }
 
-.navbar-links {
+/* ---------- Sidebar ---------- */
+
+.sidebar {
+    position: fixed;
+    top: var(--navbar-h);
+    bottom: 0;
+    left: 0;
+    z-index: 20;
+    width: var(--sidebar-w);
+    padding: 1rem 0.75rem;
+    overflow-y: auto;
+    background: var(--navbar-bg);
+    border-right: 1px solid var(--navbar-border);
+}
+
+.sidebar-links {
     display: flex;
-    align-items: center;
-    gap: 0.25rem;
+    flex-direction: column;
+    gap: 0.15rem;
     margin: 0;
     padding: 0;
     list-style: none;
 }
 
-.navbar-links a {
+.sidebar-links a {
     display: block;
-    padding: 0.5rem 0.85rem;
+    padding: 0.55rem 0.8rem;
     border-radius: 6px;
     font-size: 0.925rem;
     color: var(--navbar-fg);
@@ -69,15 +91,100 @@ body {
     transition: background 0.15s ease, color 0.15s ease;
 }
 
-.navbar-links a:hover {
+.sidebar-links a:hover {
     background: rgba(255, 255, 255, 0.07);
     color: var(--navbar-fg-strong);
 }
 
-.navbar-actions {
+.sidebar-heading {
+    margin-top: 1rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #6b7492;
+}
+
+/* ---------- Account avatar + logout modal ---------- */
+
+.avatar {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--navbar-accent);
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+}
+
+.avatar:hover {
+    background: #3b66e6;
+}
+
+.avatar-lg {
+    width: 44px;
+    height: 44px;
+    font-size: 1.1rem;
+    cursor: default;
+}
+
+/* Checkbox drives the modal so no JS is needed */
+.user-menu-toggle {
+    display: none;
+}
+
+.modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: rgba(12, 17, 43, 0.45);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 50;
+    width: min(340px, calc(100vw - 2rem));
+    padding: 1.25rem;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 20px 50px rgba(12, 17, 43, 0.25);
+}
+
+.user-menu-toggle:checked ~ .modal-backdrop,
+.user-menu-toggle:checked ~ .modal {
+    display: block;
+}
+
+.modal-head {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #eef0f6;
+}
+
+.modal-email {
+    margin: 0 0 0.35rem;
+    font-weight: 600;
+    word-break: break-all;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
 }
 
 .navbar-btn {
@@ -134,8 +241,8 @@ body {
     color: #3dd098;
 }
 
-/* Burger toggle: hidden on desktop, drives the mobile menu with no JS */
-.navbar-toggle,
+/* Burger toggle: hidden on desktop where the sidebar is always visible */
+.sidebar-toggle,
 .navbar-burger {
     display: none;
 }
@@ -163,27 +270,18 @@ body {
         background: rgba(255, 255, 255, 0.07);
     }
 
-    .navbar-menu {
-        display: none;
-        flex-direction: column;
-        align-items: stretch;
-        flex-basis: 100%;
-        gap: 1rem;
-        padding-top: 0.75rem;
-        border-top: 1px solid var(--navbar-border);
+    /* Sidebar slides off-canvas and the burger brings it back */
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.2s ease;
     }
 
-    .navbar-toggle:checked ~ .navbar-menu {
-        display: flex;
+    .sidebar-toggle:checked ~ .sidebar {
+        transform: translateX(0);
     }
 
-    .navbar-links {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .navbar-actions {
-        justify-content: flex-start;
+    .sidebar ~ main {
+        margin-left: auto;
     }
 }
 
@@ -193,6 +291,11 @@ main {
     max-width: 1080px;
     margin: 0 auto;
     padding: 2rem 1.5rem 4rem;
+}
+
+/* Only offset the content on pages that actually render a sidebar */
+.sidebar ~ main {
+    margin: 0 auto 0 var(--sidebar-w);
 }
 
 h1 {
