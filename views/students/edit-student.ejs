@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit <%= student.firstName + " " + student.lastName %></title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+    <%- include('../partials/sidebar') %>
+
+    <main>
+        <a class="back-link" href="/students/<%= student._id %>">← Back to student</a>
+        <h1>Edit <%= student.firstName + " " + student.lastName %></h1>
+
+        <form class="form" action="/students/<%= student._id %>?_method=PUT" method="POST">
+            <div class="field">
+                <label for="code">First name</label>
+                <input type="text" name="firstName" id="code" value="<%= student.firstName %>" required>
+            </div>
+
+            <div class="field">
+                <label for="name">Last name</label>
+                <input type="text" name="lastName" id="name" value="<%= student.lastName %>" minlength="3" maxlength="100" required>
+            </div>
+
+            <div class="field">
+                <label for="status">Status</label>
+                <select name="status" id="status">
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                    <option value="graduated">graduated</option>
+                    <option value="withdrawn">Withdrawn</option>
+                </select>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn btn-solid" type="submit">Save changes</button>
+                <a class="btn btn-ghost" href="/students/<%= student._id %>">Cancel</a>
+            </div>
+        </form>
+    </main>
+</body>
+</html>

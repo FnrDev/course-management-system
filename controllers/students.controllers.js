@@ -10,6 +10,18 @@ router.get('/', checkRole("admin"), async (req, res) => {
     res.render('students/all-students.ejs', { students })
 })
 
+router.get('/new', checkRole("admin"), async (req, res) => {
+    const { firstName, lastName, status } = req.body;
+
+    await Student.create({
+        firstName,
+        lastName,
+        status
+    })
+
+    return res.redirect('/students')
+})
+
 router.get('/:id', async (req, res) => {
     const student = await Student.findById(req.params.id)
     const courses = await Enrollment.find({ student: student._id, status: 'enrolled' }).populate('course')
