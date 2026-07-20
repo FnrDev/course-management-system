@@ -160,3 +160,6 @@ CROSS-CUTTING
 - Add prerequisite and corequisite course requirements to enrollment eligibility.
 
 ## Credits
+
+- Mr. Omar — project guidance and instruction.
+- Bootstrap — interface design and styling components.
