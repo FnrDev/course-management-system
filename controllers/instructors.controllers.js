@@ -1,9 +1,21 @@
 const checkRole = require('../middleware/checkRole')
 const isSignedIn = require('../middleware/is-signed-in')
+const Course = require('../models/Course')
 const Instructor = require('../models/Instructor')
 const User = require('../models/user')
 
 const router = require('express').Router()
+
+async function countEnrolledByCourse(courseIds) {
+    const rows = await Enrollment.aggregate([
+        { $match: { course: { $in: courseIds }, status: 'enrolled' } },
+        { $group: { _id: '$course', total: { $sum: 1 } } }
+    ])
+
+    const counts = {}
+    rows.forEach(row => { counts[row._id] = row.total })
+    return counts
+}
 
 router.get('/', async (req, res) => {
     const instructors = await Instructor.find({ status: "active" })
@@ -40,8 +52,9 @@ router.post('/', isSignedIn, checkRole("admin"), async (req, res) => {
 
 // View instructor profile
 router.get('/:id', async (req, res) => {
-    const instructor = Instructor.findById(req.params.id)
-    res.render('instructors/details-instructors.ejs', { instructor })
+    const instructor = await Instructor.findById(req.params.id)
+    const coursesEnrolled = await Course.find({ instructor: instructor._id, isActive: true })
+    res.render('instructors/details-instructors.ejs', { instructor, courses: coursesEnrolled })
 })
 
 // Edit instructor form (admin)

@@ -3,9 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>instructors</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <h1>All Instructors</h1>
+    <%- include('../partials/navbar') %>
+
+    <main>
+        <div class="page-head">
+            <h1>instructors</h1>
+            <% if (user && user.role === 'admin') { %>
+                <a class="btn btn-solid" href="/instructors/new">New instructor</a>
+            <% } %>
+        </div>
+
+        <% if (instructors.length === 0) { %>
+            <p class="empty">No instructors match your search.</p>
+        <% } else { %>
+            <ul class="card-grid">
+                <% instructors.forEach(instructor => { %>
+                    <li class="card">
+                        <div class="card-head">
+                            <span class="card-code"><%= instructor.staffNumber %></span>
+                        </div>
+
+                        <h2 class="card-title">
+                            <a href="/instructors/<%= instructor._id %>"><%= instructor.firstName + " " + instructor.lastName %></a>
+                        </h2>
+
+                            <div class="card-meta">
+                                <a class="btn btn-solid btn-sm" href="/instructors/<%= instructor._id %>" role="button">Go to instructor</a>
+                            </div>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } %>
+    </main>
 </body>
 </html>
