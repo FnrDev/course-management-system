@@ -59,7 +59,7 @@ router.get('/:id', async (req, res) => {
 
 // Edit instructor form (admin)
 router.get('/:id/edit', isSignedIn, checkRole("admin"), async (req, res) => {
-    const instructor = Instructor.findById(req.params.id)
+    const instructor = await Instructor.findById(req.params.id)
     res.render('instructors/edit-instructors.ejs', { instructor })
 })
 
