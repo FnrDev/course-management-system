@@ -2,7 +2,7 @@ const checkRole = require('../middleware/checkRole')
 const isSignedIn = require('../middleware/is-signed-in')
 const Course = require('../models/Course')
 const Instructor = require('../models/Instructor')
-const User = require('../models/user')
+const User = require('../models/User')
 
 const router = require('express').Router()
 
