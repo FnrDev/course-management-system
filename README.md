@@ -120,8 +120,43 @@ CROSS-CUTTING
 
 ## Features
 
+- **Authentication and sessions**
+  - Sign up, sign in, and sign out with encrypted passwords using bcrypt.
+  - Persistent MongoDB-backed sessions with role-aware navigation.
+
+- **Role-based access**
+  - Student, instructor, and admin roles with different navigation and permitted actions.
+  - Protected management, enrollment, and grading routes.
+
+- **Course management**
+  - Browse the course catalog and open detailed course pages.
+  - View course descriptions, credits, capacity, enrolled count, and assigned instructor.
+  - Admins can create, edit, assign instructors to, and deactivate courses.
+
+- **Instructor management**
+  - Browse instructors and view their profiles and assigned courses.
+  - Admins can create, edit, and deactivate instructor records.
+
+- **Student management**
+  - Admins can browse student records and view student profiles and current courses.
+  - Admins can edit student information and mark students as inactive.
+
+- **Enrollment and grading**
+  - Students can enroll in available courses and drop existing enrollments.
+  - Instructors can view course rosters and enter or update student grades.
+  - Grade pages display the student, course, and current grade before saving changes.
+
+- **User interface**
+  - Responsive CourseHub navigation with role-specific sidebar links.
+  - Reusable confirmation dialogs for course, instructor, student, and enrollment deletion actions.
+  - Semantic HTML structure, responsive cards, forms, tables, and a CourseHub favicon.
+
+- **Application reliability**
+  - Route-level error handling with temporary console logging for database results and errors.
+  - Soft deletion preserves historical course, instructor, student, and enrollment records.
 
 ## Future Enhancements
 
+- Add prerequisite and corequisite course requirements to enrollment eligibility.
 
 ## Credits
