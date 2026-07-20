@@ -3,9 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title><%= student.firstName %> <%= student.lastName %></title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <h1>Student details</h1>
+    <%- include('../partials/navbar') %>
+    <%- include('../partials/sidebar') %>
+
+    <main>
+        <a class="back-link" href="/students">← Back to students</a>
+
+        <div class="page-head">
+            <div>
+                <span class="card-code"><%= student.firstName %></span>
+                <h1><%= student.firstName %> <%= student.lastName %></h1>
+            </div>
+
+            <% if (user && user.role === 'admin') { %>
+                <div class="page-head-actions">
+                    <a class="btn btn-ghost" href="/students/<%= student._id %>/edit">Edit</a>
+                    <form action="/students/<%= student._id %>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
+                </div>
+            <% } %>
+        </div>
+
+        <dl class="facts">
+            <div>
+                <dt>Student number</dt>
+                <dd><%= student.studentNumber %></dd>
+            </div>
+            <div>
+                <dt>Status</dt>
+                <dd><%= student.status %></dd>
+            </div>
+        </dl>
+
+        <section class="roster">
+            <h2>Courses enrolled (<%= courses.length %>)</h2>
+
+            <% if (courses.length === 0) { %>
+                <p class="empty">This student isn't taking any courses yet.</p>
+            <% } else { %>
+                <ul class="card-grid">
+                    <% courses.forEach(course => { %>
+                        <li class="card">
+                            <div class="card-head">
+                                <span class="card-code"><%= course.code %></span>
+                            </div>
+
+                            <h2 class="card-title">
+                                <a href="/courses/<%= course.course._id %>"><%= course.course.name %></a>
+                            </h2>
+
+                            <p class="card-desc"><%= course.description %></p>
+
+                            <div class="card-meta">
+                                <span><%= course.course.credits %> credits</span>
+                                <span><%= course.course.enrolledCount || 0 %> / <%= course.course.capacity %> seats</span>
+                            </div>
+                        </li>
+                    <% }) %>
+                </ul>
+            <% } %>
+        </section>
+    </main>
 </body>
 </html>
