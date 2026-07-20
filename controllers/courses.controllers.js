@@ -18,119 +18,160 @@ async function countEnrolledByCourse(courseIds) {
 }
 
 router.get('/', async (req, res) => {
-    const courses = await Course.find().populate('instructor')
-    const enrolledObj = await countEnrolledByCourse(courses.map(course => course._id))
+    try {
+        const courses = await Course.find().populate('instructor')
+        const enrolledObj = await countEnrolledByCourse(courses.map(course => course._id))
+        console.log({ courses, enrolled: enrolledObj })
 
-    res.render('courses/all-courses.ejs', {
-        courses,
-        enrolled: enrolledObj
-    })
+        res.render('courses/all-courses.ejs', {
+            courses,
+            enrolled: enrolledObj
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
+    }
 })
 
 router.get('/new', isSignedIn, checkRole("admin"), async (req, res) => {
-    const instructors = await Instructor.find({ status: 'active' }).sort({ firstName: 1 })
-    res.render('courses/create-courses.ejs', { instructors })
+    try {
+        const instructors = await Instructor.find({ status: 'active' }).sort({ firstName: 1 })
+        console.log(instructors)
+        res.render('courses/create-courses.ejs', { instructors })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
+    }
 })
 
 router.post('/', isSignedIn, checkRole("admin"), async (req, res) => {
-    const {
-        code,
-        name,
-        description,
-        credits,
-        capacity,
-        instructor,
-        isActive
-    } = req.body
+    try {
+        const {
+            code,
+            name,
+            description,
+            credits,
+            capacity,
+            instructor,
+            isActive
+        } = req.body
 
-    await Course.create({
-        code,
-        name,
-        description,
-        credits,
-        capacity,
-        instructor: instructor || undefined,
-        isActive: isActive === 'on'
-    })
+        const course = await Course.create({
+            code,
+            name,
+            description,
+            credits,
+            capacity,
+            instructor: instructor || undefined,
+            isActive: isActive === 'on'
+        })
+        console.log(course)
 
-    res.redirect('/courses')
+        res.redirect('/courses')
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
+    }
 })
 
 router.get('/:id', async (req, res) => {
-    const course = await Course.findById(req.params.id).populate('instructor')
+    try {
+        const course = await Course.findById(req.params.id).populate('instructor')
+        console.log(course)
 
-    if (!course) {
-        return res.redirect('/courses')
-    }
-
-    // roster for this course, shown to the instructor and admin
-    const enrollments = await Enrollment.find({
-        course: req.params.id,
-        status: 'enrolled'
-    }).populate('student')
-    console.log(enrollments)
-
-    // has the signed-in student already taken a seat?
-    let myEnrollment = null
-    if (req.session.user && req.session.user.role === 'student') {
-        const me = await Student.findOne({ user: req.session.user._id })
-        if (me) {
-            myEnrollment = enrollments.find(enrollment =>
-                enrollment.student && enrollment.student._id.equals(me._id)
-            )
+        if (!course) {
+            return res.redirect('/courses')
         }
-    }
 
-    res.render('courses/details-courses.ejs', {
-        course,
-        enrollments,
-        enrolledCount: enrollments.length,
-        myEnrollment
-    })
+        const enrollments = await Enrollment.find({
+            course: req.params.id,
+            status: 'enrolled'
+        }).populate('student')
+        console.log(enrollments)
+
+        let myEnrollment = null
+        if (req.session.user && req.session.user.role === 'student') {
+            const me = await Student.findOne({ user: req.session.user._id })
+            console.log(me)
+            if (me) {
+                myEnrollment = enrollments.find(enrollment =>
+                    enrollment.student && enrollment.student._id.equals(me._id)
+                )
+            }
+        }
+
+        res.render('courses/details-courses.ejs', {
+            course,
+            enrollments,
+            enrolledCount: enrollments.length,
+            myEnrollment
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
+    }
 })
 
 router.get('/:id/edit', isSignedIn, checkRole("admin"), async (req, res) => {
-    const course = await Course.findById(req.params.id)
+    try {
+        const course = await Course.findById(req.params.id)
+        console.log(course)
 
-    if (!course) {
-        return res.redirect('/courses')
+        if (!course) {
+            return res.redirect('/courses')
+        }
+
+        const instructors = await Instructor.find({ status: 'active' }).sort({ firstName: 1 })
+        console.log(instructors)
+        res.render('courses/edit-courses.ejs', { course, instructors })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
     }
-
-    const instructors = await Instructor.find({ status: 'active' }).sort({ firstName: 1 })
-    res.render('courses/edit-courses.ejs', { course, instructors })
 })
 
 router.put('/:id', isSignedIn, checkRole("admin"), async (req, res) => {
-    const {
-        code,
-        name,
-        description,
-        credits,
-        capacity,
-        instructor,
-        isActive
-    } = req.body
+    try {
+        const {
+            code,
+            name,
+            description,
+            credits,
+            capacity,
+            instructor,
+            isActive
+        } = req.body
 
-    await Course.findByIdAndUpdate(req.params.id, {
-        code,
-        name,
-        description,
-        credits,
-        capacity,
-        instructor: instructor || null,
-        isActive: isActive === 'on'
-    })
+        const course = await Course.findByIdAndUpdate(req.params.id, {
+            code,
+            name,
+            description,
+            credits,
+            capacity,
+            instructor: instructor || null,
+            isActive: isActive === 'on'
+        })
+        console.log(course)
 
-    res.redirect(`/courses/${req.params.id}`)
+        res.redirect(`/courses/${req.params.id}`)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
+    }
 })
 
 router.delete('/:id', isSignedIn, checkRole("admin"), async (req, res) => {
-    // soft delete
-    await Course.findByIdAndUpdate(req.params.id, {
-        isActive: false
-    })
+    try {
+        const course = await Course.findByIdAndUpdate(req.params.id, {
+            isActive: false
+        })
+        console.log(course)
 
-    res.redirect('/courses')
+        res.redirect('/courses')
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
+    }
 })
 
 module.exports = router;

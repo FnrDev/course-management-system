@@ -1,19 +1,21 @@
 <% if (user) { %>
     <aside class="sidebar">
-        <ul class="sidebar-links">
-            <li><a href="/courses">Courses</a></li>
-            <li><a href="/instructors">Instructors</a></li>
+        <nav aria-label="Sidebar navigation">
+            <ul class="sidebar-links">
+                <li><a href="/courses">Courses</a></li>
+                <li><a href="/instructors">Instructors</a></li>
 
-            <% if (user.role === 'student') { %>
-                <li><a href="/enrollments">My Enrollments</a></li>
-            <% } %>
+                <% if (user.role === 'student') { %>
+                    <li><a href="/enrollments">My Enrollments</a></li>
+                <% } %>
 
-            <% if (user.role === 'admin') { %>
-                <li class="sidebar-heading">Manage</li>
-                <li><a href="/students">Students</a></li>
-                <li><a href="/courses/new">New Course</a></li>
-                <li><a href="/instructors/new">Add Instructor</a></li>
-            <% } %>
-        </ul>
+                <% if (user.role === 'admin') { %>
+                    <li class="sidebar-heading">Manage</li>
+                    <li><a href="/students">Students</a></li>
+                    <li><a href="/courses/new">New Course</a></li>
+                    <li><a href="/instructors/new">Add Instructor</a></li>
+                <% } %>
+            </ul>
+        </nav>
     </aside>
 <% } %>

@@ -11,12 +11,12 @@
     <%- include('../partials/sidebar') %>
 
     <main>
-        <div class="page-head">
+        <header class="page-head">
             <h1>students</h1>
             <% if (user && user.role === 'admin') { %>
                 <a class="btn btn-solid" href="/students/new">New students</a>
             <% } %>
-        </div>
+        </header>
 
         <% if (students.length === 0) { %>
             <p class="empty">No students match your search.</p>
@@ -24,17 +24,17 @@
             <ul class="card-grid">
                 <% students.forEach(student => { %>
                     <li class="card">
-                        <div class="card-head">
+                        <header class="card-head">
                             <span class="card-code">Student ID: <%= student.studentNumber %></span>
-                        </div>
+                        </header>
 
                         <h2 class="card-title">
                             <a href="/students/<%= student._id %>"><%= student.firstName + " " + student.lastName %></a>
                         </h2>
 
-                            <div class="card-meta">
-                                <a class="btn btn-solid btn-sm" href="/students/<%= student._id %>" role="button">Go to students</a>
-                            </div>
+                        <footer class="card-meta">
+                            <a class="btn btn-solid btn-sm" href="/students/<%= student._id %>">Go to student</a>
+                        </footer>
                     </li>
                 <% }) %>
             </ul>

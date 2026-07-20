@@ -1,7 +1,7 @@
 <%# Lives outside <nav> so the `~` selector can reach the sidebar below it %>
 <input type="checkbox" id="sidebar-toggle" class="sidebar-toggle">
 
-<nav class="navbar">
+<nav class="navbar" aria-label="Primary navigation">
     <% if (user) { %>
         <label for="sidebar-toggle" class="navbar-burger">
             <span></span><span></span><span></span>
@@ -20,20 +20,20 @@
 
             <label for="user-menu-toggle" class="modal-backdrop"></label>
 
-            <div class="modal" role="dialog" aria-label="Account">
-                <div class="modal-head">
+            <section class="modal" role="dialog" aria-label="Account">
+                <header class="modal-head">
                     <span class="avatar avatar-lg"><%= user.email.charAt(0).toUpperCase() %></span>
                     <div>
                         <p class="modal-email"><%= user.email %></p>
                         <span class="navbar-role navbar-role-<%= user.role %>"><%= user.role %></span>
                     </div>
-                </div>
+                </header>
 
-                <div class="modal-actions">
+                <footer class="modal-actions">
                     <label for="user-menu-toggle" class="btn btn-ghost">Cancel</label>
                     <a class="btn btn-danger" href="/auth/sign-out">Logout</a>
-                </div>
-            </div>
+                </footer>
+            </section>
         <% } else { %>
             <a class="navbar-btn navbar-btn-ghost" href="/auth/sign-in">Login</a>
             <a class="navbar-btn navbar-btn-solid" href="/auth/sign-up">Sign up</a>

@@ -13,7 +13,7 @@
     <main>
         <a class="back-link" href="/students">← Back to students</a>
 
-        <div class="page-head">
+        <header class="page-head">
             <div>
                 <span class="card-code"><%= student.firstName %></span>
                 <h1><%= student.firstName %> <%= student.lastName %></h1>
@@ -31,7 +31,7 @@
                     }) %>
                 </div>
             <% } %>
-        </div>
+        </header>
 
         <dl class="facts">
             <div>
@@ -53,9 +53,9 @@
                 <ul class="card-grid">
                     <% courses.forEach(course => { %>
                         <li class="card">
-                            <div class="card-head">
+                            <header class="card-head">
                                 <span class="card-code"><%= course.code %></span>
-                            </div>
+                            </header>
 
                             <h2 class="card-title">
                                 <a href="/courses/<%= course.course._id %>"><%= course.course.name %></a>
@@ -63,10 +63,10 @@
 
                             <p class="card-desc"><%= course.description %></p>
 
-                            <div class="card-meta">
+                            <footer class="card-meta">
                                 <span><%= course.course.credits %> credits</span>
                                 <span><%= course.course.enrolledCount || 0 %> / <%= course.course.capacity %> seats</span>
-                            </div>
+                            </footer>
                         </li>
                     <% }) %>
                 </ul>

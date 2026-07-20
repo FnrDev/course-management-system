@@ -4,58 +4,91 @@ const Enrollment = require('../models/Enrollment')
 
 const router = require('express').Router()
 
-// List all students (admin)
 router.get('/', checkRole("admin"), async (req, res) => {
-    const students = await Student.find();
-    res.render('students/all-students.ejs', { students })
+    try {
+        const students = await Student.find();
+        console.log(students)
+        res.render('students/all-students.ejs', { students })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
+    }
 })
 
 router.get('/new', checkRole("admin"), async (req, res) => {
-    const { firstName, lastName, status } = req.body;
+    try {
+        const { firstName, lastName, status } = req.body;
 
-    await Student.create({
-        firstName,
-        lastName,
-        status
-    })
+        const student = await Student.create({
+            firstName,
+            lastName,
+            status
+        })
+        console.log(student)
 
-    return res.redirect('/students')
+        return res.redirect('/students')
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
+    }
 })
 
 router.get('/:id', async (req, res) => {
-    const student = await Student.findById(req.params.id)
-    const courses = await Enrollment.find({ student: student._id, status: 'enrolled' }).populate('course')
-    res.render('students/details-student.ejs', { student, courses })
+    try {
+        const student = await Student.findById(req.params.id)
+        console.log(student)
+        const courses = await Enrollment.find({ student: student._id, status: 'enrolled' }).populate('course')
+        console.log(courses)
+        res.render('students/details-student.ejs', { student, courses })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
+    }
 })
 
-// I know we can edit any user just by changing id
 router.get('/:id/edit', async (req, res) => {
-    const student = await Student.findById(req.params.id)
-    res.render('students/edit-student.ejs', { student })
+    try {
+        const student = await Student.findById(req.params.id)
+        console.log(student)
+        res.render('students/edit-student.ejs', { student })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
+    }
 })
 
-// I know we can edit any user just by changing id
 router.put('/:id', async (req, res) => {
-    const {
-        firstName,
-        lastName,
-        status
-    } = req.body;
+    try {
+        const {
+            firstName,
+            lastName,
+            status
+        } = req.body;
 
-    await Student.findByIdAndUpdate(req.params.id, {
-        firstName,
-        lastName,
-        status
-    })
+        const student = await Student.findByIdAndUpdate(req.params.id, {
+            firstName,
+            lastName,
+            status
+        })
+        console.log(student)
 
-    res.redirect('/students')
+        res.redirect('/students')
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
+    }
 })
 
 router.delete('/:id', checkRole("admin"), async (req, res) => {
-    await Student.findByIdAndUpdate(req.params.id, {
-        status: 'inactive'
-    })
+    try {
+        const student = await Student.findByIdAndUpdate(req.params.id, {
+            status: 'inactive'
+        })
+        console.log(student)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
+    }
 })
-
 
 module.exports = router

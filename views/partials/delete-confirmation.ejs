@@ -7,11 +7,13 @@
 </button>
 
 <dialog class="confirmation-dialog" id="<%= confirmId %>" aria-labelledby="<%= confirmId %>-title">
-    <div class="confirmation-dialog-content">
-        <h2 id="<%= confirmId %>-title"><%= title %></h2>
+    <article class="confirmation-dialog-content">
+        <header>
+            <h2 id="<%= confirmId %>-title"><%= title %></h2>
+        </header>
         <p><%= message %></p>
 
-        <div class="confirmation-actions">
+        <footer class="confirmation-actions">
             <form method="dialog">
                 <button class="btn btn-ghost" type="submit">Cancel</button>
             </form>
@@ -21,6 +23,6 @@
                     <%= typeof confirmLabel !== 'undefined' ? confirmLabel : 'Delete' %>
                 </button>
             </form>
-        </div>
-    </div>
+        </footer>
+    </article>
 </dialog>

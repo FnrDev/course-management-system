@@ -11,12 +11,12 @@
     <%- include('../partials/sidebar') %>
 
     <main>
-        <div class="page-head">
+        <header class="page-head">
             <h1>Courses</h1>
             <% if (user && user.role === 'admin') { %>
                 <a class="btn btn-solid" href="/courses/new">New Course</a>
             <% } %>
-        </div>
+        </header>
 
         <% if (courses.length === 0) { %>
             <p class="empty">No courses match your search.</p>
@@ -24,12 +24,12 @@
             <ul class="card-grid">
                 <% courses.forEach(course => { %>
                     <li class="card">
-                        <div class="card-head">
+                        <header class="card-head">
                             <span class="card-code"><%= course.code %></span>
                             <span class="pill <%= enrolled >= course.capacity ? 'pill-full' : 'pill-open' %>">
                                 <%= enrolled[course._id] %>/<%= course.capacity %>
                             </span>
-                        </div>
+                        </header>
 
                         <h2 class="card-title">
                             <a href="/courses/<%= course._id %>"><%= course.name %></a>
@@ -37,7 +37,7 @@
 
                         <p class="card-desc"><%= course.description %></p>
 
-                        <div class="card-meta">
+                        <footer class="card-meta">
                             <span><%= course.credits %> credits</span>
                             <span>
                                 <% if (course.instructor) { %>
@@ -46,7 +46,7 @@
                                     Unassigned
                                 <% } %>
                             </span>
-                        </div>
+                        </footer>
                     </li>
                 <% }) %>
             </ul>

@@ -4,59 +4,85 @@ const Student = require('../models/Student')
 
 const router = require('express').Router()
 
-// My enrollments (student)
 router.get('/', checkRole("student"), async (req, res) => {
-    const myEnrollment = await Enrollment.find({ student: req.session.user._id })
-    res.render('enrollments/my-enrollment.ejs', { myEnrollment })
-})
-
-// Enroll in course (student)
-router.post('/:courseId', checkRole("student"), async (req, res) => {
-    await Enrollment.create({
-        course: req.params.courseId,
-        status: 'enrolled',
-        enrolledAt: new Date(),
-        student: req.session.user._id
-    })
-
-    res.redirect('/enrollments')
-})
-
-// Drop course (student)
-router.delete('/:id', checkRole("student"), async (req, res) => {
-    await Enrollment.findByIdAndUpdate(req.params.id, {
-        status: 'dropped',
-        droppedAt: new Date()
-    })
-})
-
-// Grade entry form (instructor)
-router.get('/:id/grade', checkRole("instructor"), async (req, res) => {
-    const enrollment = await Enrollment.findById(req.params.id)
-        .populate('student')
-        .populate('course')
-
-    if (!enrollment || !enrollment.student || !enrollment.course) {
-        return res.redirect('/courses')
+    try {
+        const myEnrollment = await Enrollment.find({ student: req.session.user._id })
+        console.log(myEnrollment)
+        res.render('enrollments/my-enrollment.ejs', { myEnrollment })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
     }
+})
 
-    res.render('enrollments/enrollment-grade.ejs', { enrollment })
+router.post('/:courseId', checkRole("student"), async (req, res) => {
+    try {
+        const enrollment = await Enrollment.create({
+            course: req.params.courseId,
+            status: 'enrolled',
+            enrolledAt: new Date(),
+            student: req.session.user._id
+        })
+        console.log(enrollment)
+
+        res.redirect('/enrollments')
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
+    }
+})
+
+router.delete('/:id', checkRole("student"), async (req, res) => {
+    try {
+        const enrollment = await Enrollment.findByIdAndUpdate(req.params.id, {
+            status: 'dropped',
+            droppedAt: new Date()
+        })
+        console.log(enrollment)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
+    }
+})
+
+router.get('/:id/grade', checkRole("instructor"), async (req, res) => {
+    try {
+        const enrollment = await Enrollment.findById(req.params.id)
+            .populate('student')
+            .populate('course')
+        console.log(enrollment)
+
+        if (!enrollment || !enrollment.student || !enrollment.course) {
+            return res.redirect('/courses')
+        }
+
+        res.render('enrollments/enrollment-grade.ejs', { enrollment })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
+    }
 })
 
 router.put('/:id/grade', checkRole("instructor"), async (req, res) => {
-    const { grade } = req.body
+    try {
+        const { grade } = req.body
 
-    const enrollment = await Enrollment.findByIdAndUpdate(req.params.id, {
-        grade,
-        gradedAt: new Date(),
-        gradedBy: req.session.user._id
-    })
+        const enrollment = await Enrollment.findByIdAndUpdate(req.params.id, {
+            grade,
+            gradedAt: new Date(),
+            gradedBy: req.session.user._id
+        })
+        console.log(enrollment)
 
-    if (!enrollment) {
-        return res.redirect('/courses')
+        if (!enrollment) {
+            return res.redirect('/courses')
+        }
+
+        res.redirect(`/courses/${enrollment.course}`)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
     }
-
-    res.redirect(`/courses/${enrollment.course}`)
 })
 
 module.exports = router

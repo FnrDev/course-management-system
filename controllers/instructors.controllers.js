@@ -18,75 +18,115 @@ async function countEnrolledByCourse(courseIds) {
 }
 
 router.get('/', async (req, res) => {
-    const instructors = await Instructor.find({ status: "active" })
-    res.render('instructors/all-instructors.ejs', { instructors })
+    try {
+        const instructors = await Instructor.find({ status: "active" })
+        console.log(instructors)
+        res.render('instructors/all-instructors.ejs', { instructors })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
+    }
 })
 
-// New instructor form (admin)
 router.get('/new', isSignedIn, checkRole("admin"), async (req, res) => {
-    // show list of all users to display them in UI ti make them instructors
-    const users = await User.find()
-    res.render('instructors/create-instructors.ejs', { users })
+    try {
+        const users = await User.find()
+        console.log(users.map(user => ({
+            id: user._id,
+            email: user.email,
+            role: user.role
+        })))
+        res.render('instructors/create-instructors.ejs', { users })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
+    }
 })
 
-// Create instructor (admin)
 router.post('/', isSignedIn, checkRole("admin"), async (req, res) => {
-    const {
-        staffNumber,
-        firstName,
-        lastName,
-        status,
-        userId
-    } = req.body
+    try {
+        const {
+            staffNumber,
+            firstName,
+            lastName,
+            status,
+            userId
+        } = req.body
 
-    await Instructor.create({
-        user: userId,
-        staffNumber,
-        firstName,
-        lastName,
-        status,
-    })
+        const instructor = await Instructor.create({
+            user: userId,
+            staffNumber,
+            firstName,
+            lastName,
+            status,
+        })
+        console.log(instructor)
 
-    res.redirect('/instructors')
+        res.redirect('/instructors')
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
+    }
 })
 
-// View instructor profile
 router.get('/:id', async (req, res) => {
-    const instructor = await Instructor.findById(req.params.id)
-    const coursesEnrolled = await Course.find({ instructor: instructor._id, isActive: true })
-    res.render('instructors/details-instructors.ejs', { instructor, courses: coursesEnrolled })
+    try {
+        const instructor = await Instructor.findById(req.params.id)
+        console.log(instructor)
+        const coursesEnrolled = await Course.find({ instructor: instructor._id, isActive: true })
+        console.log(coursesEnrolled)
+        res.render('instructors/details-instructors.ejs', { instructor, courses: coursesEnrolled })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
+    }
 })
 
-// Edit instructor form (admin)
 router.get('/:id/edit', isSignedIn, checkRole("admin"), async (req, res) => {
-    const instructor = await Instructor.findById(req.params.id)
-    res.render('instructors/edit-instructors.ejs', { instructor })
+    try {
+        const instructor = await Instructor.findById(req.params.id)
+        console.log(instructor)
+        res.render('instructors/edit-instructors.ejs', { instructor })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
+    }
 })
 
-// Update instructor (admin)
 router.put('/:id', isSignedIn, checkRole("admin"), async (req, res) => {
-    const {
-        firstName,
-        lastName,
-        status
-    } = req.body
+    try {
+        const {
+            firstName,
+            lastName,
+            status
+        } = req.body
 
-    await Instructor.findByIdAndUpdate(req.params.id, {
-        firstName,
-        lastName,
-        status
-    })
+        const instructor = await Instructor.findByIdAndUpdate(req.params.id, {
+            firstName,
+            lastName,
+            status
+        })
+        console.log(instructor)
 
-    res.redirect('/instructors')
+        res.redirect('/instructors')
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
+    }
 })
 
-// Delete instructor (admin)
 router.delete('/:id', isSignedIn, checkRole("admin"), async (req, res) => {
-    await Instructor.findByIdAndUpdate(req.params.id, {
-        status: "inactive"
-    })
+    try {
+        const instructor = await Instructor.findByIdAndUpdate(req.params.id, {
+            status: "inactive"
+        })
+        console.log(instructor)
 
-    res.redirect('/instructors')
+        res.redirect('/instructors')
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Something went wrong')
+    }
 })
 
 module.exports = router
