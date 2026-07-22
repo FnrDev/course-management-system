@@ -518,6 +518,32 @@ h1 {
     color: #6b7285;
 }
 
+.enrollment-instructor {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #5a6478;
+}
+
+.enrollment-status {
+    text-transform: capitalize;
+}
+
+.enrollment-card-footer {
+    margin-top: auto;
+}
+
+.enrollment-card-footer .card-meta {
+    flex-wrap: wrap;
+}
+
+.card-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.85rem;
+}
+
 .pill {
     padding: 0.2rem 0.55rem;
     border-radius: 999px;

@@ -5,10 +5,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <title>My Enrollments</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+    <%- include('../partials/navbar') %>
+    <%- include('../partials/sidebar') %>
+
     <main>
-        <h1>My enrollments</h1>
+        <header class="page-head">
+            <div>
+                <h1>My enrollments</h1>
+                <p class="lede">Review your courses, enrollment status, and grades.</p>
+            </div>
+
+            <a class="btn btn-solid" href="/courses">Browse courses</a>
+        </header>
+
+        <% if (myEnrollment.length === 0) { %>
+            <section class="empty" aria-labelledby="empty-enrollments-title">
+                <h2 id="empty-enrollments-title">No enrollments yet</h2>
+                <p>Browse the course catalog and choose a course to get started.</p>
+                <a class="btn btn-solid" href="/courses">Find a course</a>
+            </section>
+        <% } else { %>
+            <ul class="card-grid">
+                <% myEnrollment.forEach(enrollment => { %>
+                    <%
+                        const course = enrollment.course && enrollment.course.name
+                            ? enrollment.course
+                            : null
+                        const courseId = course ? course._id : enrollment.course
+                        const status = enrollment.status || 'enrolled'
+                        const statusClass = status === 'enrolled'
+                            ? 'pill-open'
+                            : status === 'completed'
+                                ? 'pill-complete'
+                                : 'pill-full'
+                    %>
+
+                    <li class="card">
+                        <header class="card-head">
+                            <span class="card-code"><%= course ? course.code : 'COURSE' %></span>
+                            <span class="pill enrollment-status <%= statusClass %>"><%= status %></span>
+                        </header>
+
+                        <h2 class="card-title">
+                            <% if (courseId) { %>
+                                <a href="/courses/<%= courseId %>"><%= course ? course.name : 'Course enrollment' %></a>
+                            <% } else { %>
+                                <%= course ? course.name : 'Course enrollment' %>
+                            <% } %>
+                        </h2>
+
+                        <p class="card-desc">
+                            <%= course ? course.description : 'Open the course to view its description and instructor.' %>
+                        </p>
+
+                        <% if (course && course.instructor && course.instructor.firstName) { %>
+                            <p class="enrollment-instructor">
+                                Instructor: <%= course.instructor.firstName %> <%= course.instructor.lastName %>
+                            </p>
+                        <% } %>
+
+                        <footer class="enrollment-card-footer">
+                            <div class="card-meta">
+                                <span>
+                                    <%= course ? `${course.credits} credits` : `Status: ${status}` %>
+                                </span>
+                                <span>Grade: <%= enrollment.grade || 'Not graded' %></span>
+                            </div>
+
+                            <div class="card-actions">
+                                <% if (courseId) { %>
+                                    <a class="btn btn-ghost btn-sm" href="/courses/<%= courseId %>">View course</a>
+                                <% } %>
+
+                                <% if (status === 'enrolled') { %>
+                                    <%- include('../partials/delete-confirmation', {
+                                        confirmId: `drop-enrollment-${enrollment._id}`,
+                                        action: `/enrollments/${enrollment._id}?_method=DELETE`,
+                                        title: 'Drop this course?',
+                                        message: course
+                                            ? `You will be removed from ${course.name}.`
+                                            : 'You will be removed from this course.',
+                                        triggerLabel: 'Drop course',
+                                        confirmLabel: 'Drop course'
+                                    }) %>
+                                <% } %>
+                            </div>
+                        </footer>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } %>
     </main>
 </body>
 </html>

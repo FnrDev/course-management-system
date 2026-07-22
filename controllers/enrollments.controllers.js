@@ -1,6 +1,7 @@
 const checkRole = require('../middleware/checkRole')
 const Enrollment = require('../models/Enrollment')
 const Student = require('../models/Student')
+const User = require('../models/User')
 
 const router = require('express').Router()
 
@@ -39,6 +40,7 @@ router.delete('/:id', checkRole("student"), async (req, res) => {
             droppedAt: new Date()
         })
         console.log(enrollment)
+        return res.redirect('/enrollments')
     } catch (error) {
         console.log(error)
         res.status(500).send('Something went wrong')
