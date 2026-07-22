@@ -7,7 +7,7 @@ const router = require('express').Router()
 
 router.get('/', checkRole("student"), async (req, res) => {
     try {
-        const myEnrollment = await Enrollment.find({ student: req.session.user._id })
+        const myEnrollment = await Enrollment.find({ student: req.session.user._id, status: 'enrolled' })
         console.log(myEnrollment)
         res.render('enrollments/my-enrollment.ejs', { myEnrollment })
     } catch (error) {
