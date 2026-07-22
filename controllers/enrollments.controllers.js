@@ -1,13 +1,24 @@
 const checkRole = require('../middleware/checkRole')
 const Enrollment = require('../models/Enrollment')
 const Student = require('../models/Student')
-const User = require('../models/User')
 
 const router = require('express').Router()
 
 router.get('/', checkRole("student"), async (req, res) => {
     try {
-        const myEnrollment = await Enrollment.find({ student: req.session.user._id, status: 'enrolled' })
+        const student = await Student.findOne({ user: req.session.user._id })
+        const studentIds = student
+            ? [req.session.user._id, student._id]
+            : [req.session.user._id]
+        const myEnrollment = await Enrollment.find({
+            student: { $in: studentIds },
+            status: 'enrolled'
+        })
+            .populate({
+                path: 'course',
+                populate: { path: 'instructor' }
+            })
+            .sort({ enrolledAt: -1 })
         console.log(myEnrollment)
         res.render('enrollments/my-enrollment.ejs', { myEnrollment })
     } catch (error) {
@@ -18,11 +29,26 @@ router.get('/', checkRole("student"), async (req, res) => {
 
 router.post('/:courseId', checkRole("student"), async (req, res) => {
     try {
+        const student = await Student.findOne({ user: req.session.user._id })
+        const studentIds = student
+            ? [req.session.user._id, student._id]
+            : [req.session.user._id]
+        const existingEnrollment = await Enrollment.findOne({
+            course: req.params.courseId,
+            status: 'enrolled',
+            student: { $in: studentIds }
+        })
+        console.log(existingEnrollment)
+
+        if (existingEnrollment) {
+            return res.redirect(`/courses/${req.params.courseId}`)
+        }
+
         const enrollment = await Enrollment.create({
             course: req.params.courseId,
             status: 'enrolled',
             enrolledAt: new Date(),
-            student: req.session.user._id
+            student: student ? student._id : req.session.user._id
         })
         console.log(enrollment)
 

@@ -93,11 +93,16 @@ router.get('/:id', async (req, res) => {
         if (req.session.user && req.session.user.role === 'student') {
             const me = await Student.findOne({ user: req.session.user._id })
             console.log(me)
-            if (me) {
-                myEnrollment = enrollments.find(enrollment =>
-                    enrollment.student && enrollment.student._id.equals(me._id)
-                )
-            }
+            const studentIds = me
+                ? [req.session.user._id, me._id]
+                : [req.session.user._id]
+
+            myEnrollment = await Enrollment.findOne({
+                course: req.params.id,
+                status: 'enrolled',
+                student: { $in: studentIds }
+            })
+            console.log(myEnrollment)
         }
 
         res.render('courses/details-courses.ejs', {
