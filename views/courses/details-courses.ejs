@@ -57,6 +57,24 @@
                     <% } %>
                 </dd>
             </div>
+            <div>
+                <dt>Prerequisites</dt>
+                <dd>
+                    <% if (prerequisites.length === 0) { %>
+                        None
+                    <% } else { %>
+                        <ul class="prerequisite-list">
+                            <% prerequisites.forEach(prerequisite => { %>
+                                <li>
+                                    <a href="/courses/<%= prerequisite._id %>">
+                                        <%= prerequisite.code %> — <%= prerequisite.name %>
+                                    </a>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    <% } %>
+                </dd>
+            </div>
         </dl>
 
         <% if (user && user.role === 'student') { %>
@@ -72,6 +90,16 @@
                         confirmLabel: 'Drop course'
                     }) %>
                 </div>
+            <% } else if (missingPrerequisites.length > 0) { %>
+                <aside class="notice notice-warning" aria-live="polite">
+                    <div class="notice-copy">
+                        <strong>Complete the prerequisites before enrolling.</strong>
+                        <span>
+                            Missing:
+                            <%= missingPrerequisites.map(prerequisite => `${prerequisite.code} — ${prerequisite.name}`).join(', ') %>
+                        </span>
+                    </div>
+                </aside>
             <% } else if (enrolledCount >= course.capacity) { %>
                 <p class="notice">This course is full.</p>
             <% } else { %>

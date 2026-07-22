@@ -384,6 +384,18 @@ h1 {
     background: #eef2fe;
 }
 
+.notice-warning {
+    border-color: #f0d8a8;
+    background: #fff8e8;
+    color: #694d16;
+}
+
+.notice-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
 .btn {
     display: inline-block;
     padding: 0.5rem 1rem;
@@ -590,6 +602,14 @@ h1 {
     text-decoration: none;
 }
 
+.prerequisite-list {
+    display: grid;
+    gap: 0.25rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
 .roster {
     margin-top: 2.5rem;
 }
@@ -705,6 +725,45 @@ textarea {
 
 .field-check input {
     width: auto;
+}
+
+.prerequisite-field {
+    padding: 0;
+    border: 0;
+}
+
+.prerequisite-field legend {
+    padding: 0;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #3c4459;
+}
+
+.field-help,
+.prerequisite-empty {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #6b7285;
+}
+
+.prerequisite-options {
+    display: grid;
+    gap: 0.65rem;
+    max-height: 220px;
+    padding: 0.8rem;
+    overflow-y: auto;
+    border: 1px solid #d3d8e4;
+    border-radius: 6px;
+    background: #f8f9fc;
+}
+
+.prerequisite-options .field-check {
+    align-items: flex-start;
+    margin: 0;
+}
+
+.prerequisite-options input {
+    margin-top: 0.2rem;
 }
 
 .form-actions {

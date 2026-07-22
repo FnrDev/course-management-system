@@ -131,7 +131,7 @@ CROSS-CUTTING
 - **Course management**
   - Browse the course catalog and open detailed course pages.
   - View course descriptions, credits, capacity, enrolled count, and assigned instructor.
-  - Admins can create, edit, assign instructors to, and deactivate courses.
+  - Admins can create, edit, assign instructors and prerequisites to, and deactivate courses.
 
 - **Instructor management**
   - Browse instructors and view their profiles and assigned courses.
@@ -143,6 +143,7 @@ CROSS-CUTTING
 
 - **Enrollment and grading**
   - Students can enroll in available courses and drop existing enrollments.
+  - Prerequisite eligibility is shown on course pages and enforced before enrollment.
   - Instructors can view course rosters and enter or update student grades.
   - Grade pages display the student, course, and current grade before saving changes.
 
@@ -157,7 +158,7 @@ CROSS-CUTTING
 
 ## Future Enhancements
 
-- Add prerequisite and corequisite course requirements to enrollment eligibility.
+- Add corequisite course requirements to enrollment eligibility.
 
 ## Credits
 

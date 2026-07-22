@@ -1,5 +1,7 @@
 const checkRole = require('../middleware/checkRole')
+const Course = require('../models/Course')
 const Enrollment = require('../models/Enrollment')
+const Prerequisite = require('../models/Prerequisite')
 const Student = require('../models/Student')
 
 const router = require('express').Router()
@@ -7,7 +9,6 @@ const router = require('express').Router()
 router.get('/', checkRole("student"), async (req, res) => {
     try {
         const student = await Student.findOne({ user: req.session.user._id })
-        // try find by using both student id and user id
         const studentIds = student
             ? [req.session.user._id, student._id]
             : [req.session.user._id]
@@ -34,6 +35,29 @@ router.post('/:courseId', checkRole("student"), async (req, res) => {
         const studentIds = student
             ? [req.session.user._id, student._id]
             : [req.session.user._id]
+        const course = await Course.findById(req.params.courseId)
+
+        if (!course || !course.isActive) {
+            return res.redirect('/courses')
+        }
+
+        const prerequisiteRecords = await Prerequisite.find({ course: course._id })
+        const prerequisiteCourseIds = prerequisiteRecords.map(record => record.prerequisiteCourse)
+        const completedCourseIds = await Enrollment.find({
+            student: { $in: studentIds },
+            course: { $in: prerequisiteCourseIds },
+            status: 'completed'
+        }).distinct('course')
+        const completedCourses = new Set(completedCourseIds.map(String))
+        const hasMissingPrerequisites = prerequisiteCourseIds.some(
+            prerequisiteCourseId => !completedCourses.has(String(prerequisiteCourseId))
+        )
+        console.log({ course, prerequisiteCourseIds, completedCourseIds })
+
+        if (hasMissingPrerequisites) {
+            return res.redirect(`/courses/${course._id}`)
+        }
+
         const existingEnrollment = await Enrollment.findOne({
             course: req.params.courseId,
             status: 'enrolled',

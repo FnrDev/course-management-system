@@ -58,6 +58,29 @@
                 </select>
             </div>
 
+            <fieldset class="field prerequisite-field">
+                <legend>Prerequisite courses</legend>
+                <p class="field-help">Students must complete every selected course before they can enroll.</p>
+
+                <% if (prerequisiteCourses.length === 0) { %>
+                    <p class="prerequisite-empty">No other active courses are available.</p>
+                <% } else { %>
+                    <div class="prerequisite-options">
+                        <% prerequisiteCourses.forEach(prerequisiteCourse => { %>
+                            <label class="field-check">
+                                <input
+                                    type="checkbox"
+                                    name="prerequisites"
+                                    value="<%= prerequisiteCourse._id %>"
+                                    <%= selectedPrerequisiteIds.includes(String(prerequisiteCourse._id)) ? 'checked' : '' %>
+                                >
+                                <span><strong><%= prerequisiteCourse.code %></strong> — <%= prerequisiteCourse.name %></span>
+                            </label>
+                        <% }) %>
+                    </div>
+                <% } %>
+            </fieldset>
+
             <label class="field-check">
                 <input type="checkbox" name="isActive" <%= course.isActive ? 'checked' : '' %>>
                 Active — visible in the catalog
