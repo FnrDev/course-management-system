@@ -83,10 +83,30 @@ router.get('/:id', async (req, res) => {
             return res.redirect('/courses')
         }
 
-        const enrollments = await Enrollment.find({
+        const enrollmentRecords = await Enrollment.find({
             course: req.params.id,
             status: 'enrolled'
-        }).populate('student')
+        }).lean()
+        const enrollmentStudentIds = enrollmentRecords
+            .map(enrollment => enrollment.student)
+            .filter(Boolean)
+        const rosterStudents = await Student.find({
+            $or: [
+                { _id: { $in: enrollmentStudentIds } },
+                { user: { $in: enrollmentStudentIds } }
+            ]
+        }).lean()
+        const studentsByReference = new Map()
+        rosterStudents.forEach(student => {
+            studentsByReference.set(String(student._id), student)
+            if (student.user) {
+                studentsByReference.set(String(student.user), student)
+            }
+        })
+        const enrollments = enrollmentRecords.map(enrollment => ({
+            ...enrollment,
+            student: studentsByReference.get(String(enrollment.student)) || null
+        }))
         console.log(enrollments)
 
         let myEnrollment = null

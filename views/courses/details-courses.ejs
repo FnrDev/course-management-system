@@ -81,7 +81,7 @@
             <% } %>
         <% } %>
 
-        <% if (user && (user.role === 'admin' || user.role === 'instructor')) { %>
+        <% if (user) { %>
             <section class="roster">
                 <h2>Enrolled students (<%= enrollments.length %>)</h2>
 
@@ -91,11 +91,11 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Student #</th>
-                                <th>Name</th>
-                                <th>Grade</th>
+                                <th scope="col">Student #</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Grade</th>
                                 <% if (user.role === 'instructor') { %>
-                                    <th></th>
+                                    <th scope="col">Actions</th>
                                 <% } %>
                             </tr>
                         </thead>

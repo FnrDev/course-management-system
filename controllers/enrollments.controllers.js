@@ -7,6 +7,7 @@ const router = require('express').Router()
 router.get('/', checkRole("student"), async (req, res) => {
     try {
         const student = await Student.findOne({ user: req.session.user._id })
+        // try find by using both student id and user id
         const studentIds = student
             ? [req.session.user._id, student._id]
             : [req.session.user._id]
