@@ -86,6 +86,11 @@ router.get('/:id/edit', isSignedIn, checkRole("admin"), async (req, res) => {
     try {
         const instructor = await Instructor.findById(req.params.id)
         console.log(instructor)
+
+        if (!instructor) {
+            return res.redirect('/instructors')
+        }
+
         res.render('instructors/edit-instructors.ejs', { instructor })
     } catch (error) {
         console.log(error)
@@ -96,19 +101,25 @@ router.get('/:id/edit', isSignedIn, checkRole("admin"), async (req, res) => {
 router.put('/:id', isSignedIn, checkRole("admin"), async (req, res) => {
     try {
         const {
+            staffNumber,
             firstName,
             lastName,
             status
         } = req.body
 
         const instructor = await Instructor.findByIdAndUpdate(req.params.id, {
+            staffNumber,
             firstName,
             lastName,
             status
         })
         console.log(instructor)
 
-        res.redirect('/instructors')
+        if (!instructor) {
+            return res.redirect('/instructors')
+        }
+
+        res.redirect(`/instructors/${req.params.id}`)
     } catch (error) {
         console.log(error)
         res.status(500).send('Something went wrong')
