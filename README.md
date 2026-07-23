@@ -56,10 +56,6 @@ CROSS-CUTTING
 
 ## Routes
 
-## Routes
-
-## Routes
-
 | Method | Route | Description |
 |--------|-------|-------------|
 | GET | `/` | Home page |
